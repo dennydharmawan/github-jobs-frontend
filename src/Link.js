@@ -9,8 +9,12 @@ import { styled } from '@mui/material/styles';
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled('a')({});
 
-export const NextLinkComposed = React.forwardRef(function NextLinkComposed(props, ref) {
-  const { to, linkAs, replace, scroll, shallow, prefetch, locale, ...other } = props;
+export const NextLinkComposed = React.forwardRef(function NextLinkComposed(
+  props,
+  ref
+) {
+  const { to, linkAs, replace, scroll, shallow, prefetch, locale, ...other } =
+    props;
 
   return (
     <NextLink
@@ -37,7 +41,7 @@ NextLinkComposed.propTypes = {
   replace: PropTypes.bool,
   scroll: PropTypes.bool,
   shallow: PropTypes.bool,
-  to: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+  to: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired
 };
 
 // A styled version of the Next.js Link component:
@@ -62,11 +66,12 @@ const Link = React.forwardRef(function Link(props, ref) {
   const router = useRouter();
   const pathname = typeof href === 'string' ? href : href.pathname;
   const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === pathname && activeClassName,
+    [activeClassName]: router.pathname === pathname && activeClassName
   });
 
   const isExternal =
-    typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
+    typeof href === 'string' &&
+    (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
 
   if (isExternal) {
     if (noLinkStyle) {
@@ -77,10 +82,25 @@ const Link = React.forwardRef(function Link(props, ref) {
   }
 
   const linkAs = linkAsProp || as;
-  const nextjsProps = { to: href, linkAs, replace, scroll, shallow, prefetch, locale };
+  const nextjsProps = {
+    to: href,
+    linkAs,
+    replace,
+    scroll,
+    shallow,
+    prefetch,
+    locale
+  };
 
   if (noLinkStyle) {
-    return <NextLinkComposed className={className} ref={ref} {...nextjsProps} {...other} />;
+    return (
+      <NextLinkComposed
+        className={className}
+        ref={ref}
+        {...nextjsProps}
+        {...other}
+      />
+    );
   }
 
   return (
@@ -106,7 +126,7 @@ Link.propTypes = {
   replace: PropTypes.bool,
   role: PropTypes.string,
   scroll: PropTypes.bool,
-  shallow: PropTypes.bool,
+  shallow: PropTypes.bool
 };
 
 export default Link;

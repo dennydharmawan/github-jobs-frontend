@@ -17,6 +17,7 @@ import CustomAppBar from '../../../components/customAppBar';
 import { useEffect } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import withPageAuthRequired from '../../../lib/withPageAuthRequired';
+import * as DOMPurify from 'dompurify';
 
 export default function Details({ user }) {
   const router = useRouter();
@@ -59,7 +60,9 @@ export default function Details({ user }) {
           Job Description
         </Typography>
         <div
-          dangerouslySetInnerHTML={{ __html: data?.data?.description }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(data?.data?.description)
+          }}
         ></div>
       </Box>
     </Container>

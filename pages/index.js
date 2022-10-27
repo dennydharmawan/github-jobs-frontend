@@ -4,6 +4,10 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  TextField,
   Typography,
   Button,
   Divider,
@@ -18,11 +22,16 @@ import cookie from 'cookie';
 import axios from 'axios';
 import withPageAuthRequired from '../lib/withPageAuthRequired';
 import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import { AdbOutlined } from '@mui/icons-material';
+import PublicIcon from '@mui/icons-material/Public';
+import WorkIcon from '@mui/icons-material/Work';
 
 export default function Index({ user }) {
   const { ref, inView } = useInView();
+
+  const [filters, setFilters] = useState(null);
 
   const {
     status,
@@ -36,11 +45,20 @@ export default function Index({ user }) {
     hasNextPage,
     hasPreviousPage
   } = useInfiniteQuery(
-    ['jobs'],
+    ['jobs', filters],
     async ({ pageParam = 0 }) => {
-      const res = await axios.get(
-        'http://localhost:4000/api/jobs?page=' + pageParam
-      );
+      let res;
+
+      if (!filters) {
+        res = await axios.get(
+          'http://localhost:4000/api/jobs?page=' + pageParam
+        );
+      } else {
+        res = await axios.post(
+          'http://localhost:4000/api/jobs/search?page=' + pageParam,
+          filters
+        );
+      }
 
       return res.data;
     },
@@ -71,10 +89,123 @@ export default function Index({ user }) {
       }}
     >
       <CustomAppBar user={user} />
-      <Box sx={{ paddingInline: '2.5rem', paddingBlock: '1.5rem' }}>
-        <Typography variant="h6">Job Description</Typography>
-      </Box>
 
+      <Box
+        sx={{
+          display: 'grid',
+          rowGap: '0.2rem',
+          columnGap: '1rem',
+          gridTemplateAreas: `
+            "header1 header1 header2 header2 empty"
+            "input1 input1 input2 input2  search"
+          `,
+          paddingInline: '2.5rem',
+          marginTop: '1rem'
+        }}
+      >
+        <Box
+          sx={{
+            gridArea: 'header1'
+          }}
+        >
+          <Typography variant="body1" fontWeight="600">
+            Job Description
+          </Typography>
+        </Box>
+
+        <TextField
+          id="outlined-basic"
+          label={
+            <React.Fragment>
+              <WorkIcon fontSize="small" />
+              Filter by title, benefits, companies, expertise
+            </React.Fragment>
+          }
+          variant="outlined"
+          size="small"
+          sx={{
+            gridArea: 'input1',
+            '& .MuiFormLabel-root': {
+              display: 'flex',
+              gap: '0.5rem',
+              alignItems: 'center',
+              '& .myIcon': {
+                paddingLeft: '8px',
+                order: 999
+              }
+            }
+          }}
+        />
+
+        <Box
+          sx={{
+            gridArea: 'header2'
+          }}
+        >
+          <Typography variant="body1" fontWeight="600">
+            Location
+          </Typography>
+        </Box>
+
+        <TextField
+          id="outlined-basic"
+          variant="outlined"
+          size="small"
+          label={
+            <React.Fragment>
+              <PublicIcon fontSize="small" />
+              Filter by city, state, zip code, or country
+            </React.Fragment>
+          }
+          sx={{
+            gridArea: 'input2',
+            '& .MuiFormLabel-root': {
+              display: 'flex',
+              gap: '0.5rem',
+              alignItems: 'center',
+              '& .myIcon': {
+                paddingLeft: '8px',
+                order: 999
+              }
+            }
+          }}
+        />
+
+        <Box
+          sx={{
+            gridArea: 'search',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around'
+          }}
+        >
+          <FormGroup>
+            <FormControlLabel control={<Checkbox />} label="Full Time Only" />
+          </FormGroup>
+          <Button
+            onClick={() =>
+              setFilters({
+                company: 'Sweet',
+                type: 'Full Time'
+              })
+            }
+            variant="contained"
+            size="small"
+            sx={{ height: '32px' }}
+          >
+            Search
+          </Button>
+
+          <Button
+            onClick={() => setFilters(null)}
+            variant="contained"
+            size="small"
+            sx={{ height: '32px' }}
+          >
+            Reset
+          </Button>
+        </Box>
+      </Box>
       <Box sx={{ paddingInline: '2.5rem', paddingBlock: '1.5rem' }}>
         <Box
           sx={{

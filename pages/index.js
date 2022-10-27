@@ -17,13 +17,23 @@ import getAuth from '../lib/getAuth';
 import cookie from 'cookie';
 import axios from 'axios';
 import withPageAuthRequired from '../lib/withPageAuthRequired';
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
 
 export default function Index({ user }) {
+  const { ref, inView } = useInView();
+
   const { isLoading, data } = useQuery(['jobs'], () =>
     fetch('http://localhost:4000/api/jobs').then((res) => {
       return res.json();
     })
   );
+
+  useEffect(() => {
+    if (inView) {
+      // fetchNextPage()
+    }
+  }, [inView]);
 
   return (
     <Container

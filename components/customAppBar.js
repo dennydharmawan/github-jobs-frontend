@@ -1,8 +1,16 @@
-import { AppBar, IconButton, Typography, Button, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  IconButton,
+  Box,
+  Typography,
+  Button,
+  Toolbar
+} from '@mui/material';
 import useAuth from '../hooks/useAuth';
 import axios from 'axios';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function CustomAppBar({ user }) {
   const router = useRouter();
@@ -30,18 +38,21 @@ export default function CustomAppBar({ user }) {
       }}
     >
       <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-        >
-          <AdbIcon />
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          GitHub Jobs
-        </Typography>
+        <Link href="/">
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: 'auto'
+            }}
+          >
+            <AdbIcon sx={{ marginRight: '1rem' }} />
+
+            <Typography variant="h6" component="div" sx={{ fontSize: '24px' }}>
+              GitHub Jobs
+            </Typography>
+          </Box>
+        </Link>
 
         {user ? (
           <Button color="inherit" onClick={doLogout}>

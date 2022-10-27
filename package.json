@@ -28,6 +28,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "^7.38.0",
+    "react-intersection-observer": "^9.4.0",
     "react-use-cookie": "^1.4.0"
   },
   "devDependencies": {

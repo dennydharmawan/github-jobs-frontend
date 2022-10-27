@@ -8,6 +8,8 @@ import getAuth from '../lib/getAuth';
 // TODO error handling
 export default function Login() {
   const router = useRouter();
+  const returnTo = router.query?.returnTo;
+
   const {
     register,
     handleSubmit,
@@ -30,7 +32,7 @@ export default function Login() {
       }
     );
 
-    router.push('/');
+    router.push(returnTo || '/');
   };
 
   return (

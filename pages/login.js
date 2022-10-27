@@ -22,7 +22,7 @@ export default function Login() {
     const { email, password } = data;
 
     const response = await axios.post(
-      'http://localhost:4000/api/users/login',
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/login`,
       {
         email,
         password

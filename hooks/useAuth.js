@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function useAuth() {
   const { isLoading, error, data } = useQuery(['auth'], () =>
     axios.post(
-      `http://localhost:4000/api/users/authenticate`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/authenticate`,
       {},
       {
         withCredentials: true

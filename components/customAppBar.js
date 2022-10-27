@@ -17,7 +17,7 @@ export default function CustomAppBar({ user }) {
 
   const doLogout = async () => {
     await axios.post(
-      'http://localhost:4000/api/users/logout',
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/logout`,
       {},
       {
         withCredentials: true

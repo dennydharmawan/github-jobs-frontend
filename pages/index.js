@@ -51,11 +51,11 @@ export default function Index({ user }) {
 
       if (!filters) {
         res = await axios.get(
-          'http://localhost:4000/api/jobs?page=' + pageParam
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs?page=${pageParam}`
         );
       } else {
         res = await axios.post(
-          'http://localhost:4000/api/jobs/search?page=' + pageParam,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs/search?page=${pageParam}`,
           filters
         );
       }

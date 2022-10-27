@@ -16,18 +16,21 @@ export default function Register() {
   const onSubmit = async (data, event) => {
     const { email, name, password } = data;
     // event.preventDefault();
-    const response = await fetch('http://localhost:4000/api/users/register', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email,
-        name,
-        password
-      })
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/register`,
+      {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          password
+        })
+      }
+    );
 
     const result = await response.json();
 

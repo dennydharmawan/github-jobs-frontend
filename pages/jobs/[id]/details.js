@@ -26,9 +26,12 @@ export default function Details({ user }) {
   const { isLoading, error, data } = useQuery(
     ['jobs', id],
     () =>
-      axios.get(`http://localhost:4000/api/jobs/${id}/details`, {
-        withCredentials: true
-      }),
+      axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs/${id}/details`,
+        {
+          withCredentials: true
+        }
+      ),
     {
       enabled: Boolean(id)
     }

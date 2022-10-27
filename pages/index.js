@@ -16,6 +16,7 @@ import CustomAppBar from '../components/customAppBar';
 import getAuth from '../lib/getAuth';
 import cookie from 'cookie';
 import axios from 'axios';
+import withPageAuthRequired from '../lib/withPageAuthRequired';
 
 export default function Index({ user }) {
   const { isLoading, data } = useQuery(['jobs'], () =>
@@ -136,34 +137,4 @@ export default function Index({ user }) {
   );
 }
 
-// https://github.com/vercel/next.js/discussions/10925
-// https://github.com/auth0/nextjs-auth0/issues/129
-export async function getServerSideProps(context) {
-  const request = context.req;
-
-  let user = null;
-  if (request && request.cookies.token) {
-    request.cookies = cookie.parse(request.headers.cookie || '');
-
-    const result = await axios.post(
-      'http://localhost:4000/api/users/authenticate',
-      {},
-      {
-        withCredentials: true,
-        headers: {
-          Cookie: `token=${request.cookies.token}`
-        }
-      }
-    );
-
-    if (result?.data) {
-      user = result?.data;
-    }
-  }
-
-  console.log(user);
-
-  return {
-    props: { user } // will be passed to the page component as props
-  };
-}
+export const getServerSideProps = withPageAuthRequired(false);

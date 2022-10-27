@@ -18,8 +18,7 @@ import { useEffect } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import withPageAuthRequired from '../../../lib/withPageAuthRequired';
 
-export default function Details() {
-  // const [isAuthenticated] = useAuth();
+export default function Details({ user }) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -45,7 +44,7 @@ export default function Details() {
         minHeight: '100vh'
       }}
     >
-      <CustomAppBar />
+      <CustomAppBar user={user} />
 
       <Box
         sx={{
@@ -67,4 +66,4 @@ export default function Details() {
   );
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired(true);

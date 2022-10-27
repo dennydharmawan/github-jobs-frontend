@@ -2,9 +2,10 @@ import { AppBar, IconButton, Typography, Button, Toolbar } from '@mui/material';
 import useAuth from '../hooks/useAuth';
 import axios from 'axios';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useRouter } from 'next/router';
 
-export default function CustomAppBar() {
-  const [isAuthenticated, setAuthenticated] = useAuth();
+export default function CustomAppBar({ user }) {
+  const router = useRouter();
 
   const doLogout = async () => {
     await axios.post(
@@ -15,7 +16,7 @@ export default function CustomAppBar() {
       }
     );
 
-    setAuthenticated(false);
+    router.push('/');
   };
 
   return (
@@ -42,7 +43,7 @@ export default function CustomAppBar() {
           GitHub Jobs
         </Typography>
 
-        {isAuthenticated ? (
+        {user ? (
           <Button color="inherit" onClick={doLogout}>
             Logout
           </Button>

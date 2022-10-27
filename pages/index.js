@@ -1,8 +1,5 @@
-import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import AdbIcon from '@mui/icons-material/Adb';
 import {
   AppBar,
   Toolbar,
@@ -10,17 +7,18 @@ import {
   Typography,
   Button,
   Divider,
-  List,
-  ListItem,
-  ListItemText,
   CircularProgress
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import differenceInDays from 'date-fns/differenceInDays';
 import Link from 'next/link';
+import CustomAppBar from '../components/customAppBar';
+import getAuth from '../lib/getAuth';
+import cookie from 'cookie';
+import axios from 'axios';
 
-export default function Index() {
-  const { isLoading, error, data } = useQuery(['jobs'], () =>
+export default function Index({ user }) {
+  const { isLoading, data } = useQuery(['jobs'], () =>
     fetch('http://localhost:4000/api/jobs').then((res) => {
       return res.json();
     })
@@ -37,39 +35,7 @@ export default function Index() {
         minHeight: '100vh'
       }}
     >
-      <AppBar
-        elevation={0}
-        component="nav"
-        position="sticky"
-        sx={{
-          backgroundColor: '#4267B2',
-          paddingInline: '1rem'
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <AdbIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            GitHub Jobs
-          </Typography>
-
-          <Button color="inherit" href="/login">
-            Login
-          </Button>
-
-          <Button color="inherit" href="/register">
-            Register
-          </Button>
-        </Toolbar>
-      </AppBar>
-
+      <CustomAppBar user={user} />
       <Box sx={{ paddingInline: '2.5rem', paddingBlock: '1.5rem' }}>
         <Typography variant="h6">Job Description</Typography>
       </Box>
@@ -168,4 +134,36 @@ export default function Index() {
       </Box>
     </Container>
   );
+}
+
+// https://github.com/vercel/next.js/discussions/10925
+// https://github.com/auth0/nextjs-auth0/issues/129
+export async function getServerSideProps(context) {
+  const request = context.req;
+
+  let user = null;
+  if (request && request.cookies.token) {
+    request.cookies = cookie.parse(request.headers.cookie || '');
+
+    const result = await axios.post(
+      'http://localhost:4000/api/users/authenticate',
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          Cookie: `token=${request.cookies.token}`
+        }
+      }
+    );
+
+    if (result?.data) {
+      user = result?.data;
+    }
+  }
+
+  console.log(user);
+
+  return {
+    props: { user } // will be passed to the page component as props
+  };
 }

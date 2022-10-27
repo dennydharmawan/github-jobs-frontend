@@ -40,7 +40,7 @@ export default function Register() {
 
   return (
     <Container maxWidth="xl" disableGutters>
-      <Box sx={{ maxWidth: '500px', margin: 'auto' }}>
+      <Box sx={{ maxWidth: '300px', margin: 'auto' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             variant="outlined"

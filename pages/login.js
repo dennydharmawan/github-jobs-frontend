@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import axios from 'axios';
+import getAuth from '../lib/getAuth';
 
 // TODO error handling
 export default function Login() {
@@ -34,7 +35,7 @@ export default function Login() {
 
   return (
     <Container maxWidth="xl" disableGutters>
-      <Box sx={{ maxWidth: '500px', margin: 'auto' }}>
+      <Box sx={{ maxWidth: '300px', margin: 'auto' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             variant="outlined"

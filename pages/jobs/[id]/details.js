@@ -1,5 +1,3 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import AdbIcon from '@mui/icons-material/Adb';
 import {
   AppBar,
@@ -8,20 +6,20 @@ import {
   Typography,
   Container,
   Button,
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress
+  Box
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import differenceInDays from 'date-fns/differenceInDays';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CustomAppBar from '../../../components/customAppBar';
 
-export default function Index() {
+import { useEffect } from 'react';
+import useAuth from '../../../hooks/useAuth';
+import withPageAuthRequired from '../../../lib/withPageAuthRequired';
+
+export default function Details() {
+  // const [isAuthenticated] = useAuth();
   const router = useRouter();
   const { id } = router.query;
 
@@ -47,31 +45,7 @@ export default function Index() {
         minHeight: '100vh'
       }}
     >
-      <AppBar
-        elevation={0}
-        component="nav"
-        position="sticky"
-        sx={{
-          backgroundColor: '#4267B2',
-          paddingInline: '1rem'
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <AdbIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            GitHub Jobs
-          </Typography>
-          <Button color="inherit">Logout</Button>
-        </Toolbar>
-      </AppBar>
+      <CustomAppBar />
 
       <Box
         sx={{
@@ -82,7 +56,9 @@ export default function Index() {
         <Button variant="outlined" href="/" startIcon={<ArrowBackIcon />}>
           Back
         </Button>
-        <Typography variant="h6">Job Description</Typography>
+        <Typography variant="h6" sx={{ marginTop: '1rem' }}>
+          Job Description
+        </Typography>
         <div
           dangerouslySetInnerHTML={{ __html: data?.data?.description }}
         ></div>
@@ -90,3 +66,5 @@ export default function Index() {
     </Container>
   );
 }
+
+export const getServerSideProps = withPageAuthRequired();

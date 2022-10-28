@@ -32,7 +32,7 @@ export default function Login() {
       }
     );
 
-    // router.push(returnTo || '/');
+    router.push(returnTo || '/');
   };
 
   return (

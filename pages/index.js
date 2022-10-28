@@ -320,4 +320,4 @@ export default function Index({ user }) {
   );
 }
 
-export const getServerSideProps = withPageAuthRequired(false);
+// export const getServerSideProps = withPageAuthRequired(false);

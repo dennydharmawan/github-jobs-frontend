@@ -41,7 +41,7 @@ NextLinkComposed.propTypes = {
   replace: PropTypes.bool,
   scroll: PropTypes.bool,
   shallow: PropTypes.bool,
-  to: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired
+  to: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).is
 };
 
 // A styled version of the Next.js Link component:

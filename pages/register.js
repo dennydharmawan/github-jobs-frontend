@@ -56,7 +56,7 @@ export default function Register() {
             autoComplete="email"
             autoFocus
             {...register('email', {
-              required: 'Required field',
+              required: ' field',
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: 'Invalid email address'

@@ -20,7 +20,7 @@ import CustomAppBar from '../components/customAppBar';
 import getAuth from '../lib/getAuth';
 import cookie from 'cookie';
 import axios from 'axios';
-import withPageAuthRequired from '../lib/withPageAuthRequired';
+import withPageAuth from '../lib/withPageAuthCSR';
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -28,7 +28,7 @@ import { AdbOutlined } from '@mui/icons-material';
 import PublicIcon from '@mui/icons-material/Public';
 import WorkIcon from '@mui/icons-material/Work';
 
-export default function Index({ user }) {
+export default withPageAuth(function Index({ user }) {
   const { ref, inView } = useInView();
 
   const [filters, setFilters] = useState(null);
@@ -89,7 +89,6 @@ export default function Index({ user }) {
       }}
     >
       <CustomAppBar user={user} />
-
       <Box
         sx={{
           display: 'grid',
@@ -318,6 +317,6 @@ export default function Index({ user }) {
       </Box>
     </Container>
   );
-}
+});
 
-// export const getServerSideProps = withPageAuthRequired(false);
+// export const getServerSideProps = withPageAuth(false);

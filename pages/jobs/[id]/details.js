@@ -16,60 +16,63 @@ import CustomAppBar from '../../../components/customAppBar';
 
 import { useEffect } from 'react';
 import useAuth from '../../../hooks/useAuth';
-import withPageAuthRequired from '../../../lib/withPageAuthRequired';
+import withPageAuth from '../../../lib/withPageAuthCSR';
 import * as DOMPurify from 'dompurify';
 
-export default function Details({ user }) {
-  const router = useRouter();
-  const { id } = router.query;
+export default withPageAuth(
+  function Details({ user }) {
+    const router = useRouter();
+    const { id } = router.query;
 
-  const { isLoading, error, data } = useQuery(
-    ['jobs', id],
-    () =>
-      axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs/${id}/details`,
-        {
-          withCredentials: true
-        }
-      ),
-    {
-      enabled: Boolean(id)
-    }
-  );
+    const { isLoading, error, data } = useQuery(
+      ['jobs', id],
+      () =>
+        axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs/${id}/details`,
+          {
+            withCredentials: true
+          }
+        ),
+      {
+        enabled: Boolean(id)
+      }
+    );
 
-  return (
-    <Container
-      maxWidth="xl"
-      disableGutters
-      sx={{
-        backgroundColor: '#e1e1e1',
-        display: 'flex',
-        flexFlow: 'column',
-        minHeight: '100vh'
-      }}
-    >
-      <CustomAppBar user={user} />
-
-      <Box
+    return (
+      <Container
+        maxWidth="xl"
+        disableGutters
         sx={{
-          paddingInline: '2.5rem',
-          paddingBlock: '1.5rem'
+          backgroundColor: '#e1e1e1',
+          display: 'flex',
+          flexFlow: 'column',
+          minHeight: '100vh'
         }}
       >
-        <Button variant="outlined" href="/" startIcon={<ArrowBackIcon />}>
-          Back
-        </Button>
-        <Typography variant="h6" sx={{ marginTop: '1rem' }}>
-          Job Description
-        </Typography>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(data?.data?.description)
-          }}
-        ></div>
-      </Box>
-    </Container>
-  );
-}
+        <CustomAppBar user={user} />
 
-export const getServerSideProps = withPageAuthRequired(true);
+        <Box
+          sx={{
+            paddingInline: '2.5rem',
+            paddingBlock: '1.5rem'
+          }}
+        >
+          <Button variant="outlined" href="/" startIcon={<ArrowBackIcon />}>
+            Back
+          </Button>
+          <Typography variant="h6" sx={{ marginTop: '1rem' }}>
+            Job Description
+          </Typography>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(data?.data?.description)
+            }}
+          ></div>
+        </Box>
+      </Container>
+    );
+  },
+  {
+    willRedirect: true
+  }
+);

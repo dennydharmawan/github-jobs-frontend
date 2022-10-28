@@ -11,9 +11,11 @@ import axios from 'axios';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function CustomAppBar({ user }) {
   const router = useRouter();
+  const [localUser, setLocalUser] = useState(user);
 
   const doLogout = async () => {
     await axios.post(
@@ -24,6 +26,7 @@ export default function CustomAppBar({ user }) {
       }
     );
 
+    setLocalUser(false);
     router.push('/');
   };
 
@@ -54,7 +57,7 @@ export default function CustomAppBar({ user }) {
           </Box>
         </Link>
 
-        {user ? (
+        {localUser ? (
           <Button color="inherit" onClick={doLogout}>
             Logout
           </Button>

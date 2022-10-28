@@ -1,7 +1,9 @@
-import { Box, TextField, Button, Container } from '@mui/material';
+import { Box, TextField, Button, Container, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import { useState } from 'react';
+import axios from 'axios';
+import Link from '../components/Link';
 
 // TODO error handling
 export default function Register() {
@@ -15,29 +17,35 @@ export default function Register() {
 
   const onSubmit = async (data, event) => {
     const { email, name, password } = data;
-    // event.preventDefault();
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/register`,
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          name,
-          password
-        })
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/register`,
+        {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            name,
+            password
+          })
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+
+        setMessage('Your email has been successfully registered.');
+      } else {
+        const errorMessage = await response.text();
+
+        throw new Error(errorMessage);
       }
-    );
-
-    const result = await response.json();
-
-    if (result.errors) {
-      setMessage(data.errors);
-    } else {
-      setMessage('Your email has been successfully registered.');
+    } catch (error) {
+      setMessage(error.message);
     }
   };
 
@@ -48,7 +56,6 @@ export default function Register() {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             id="email"
             label="Email Address"
@@ -56,7 +63,7 @@ export default function Register() {
             autoComplete="email"
             autoFocus
             {...register('email', {
-              required: ' field',
+              required: 'Field is required',
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: 'Invalid email address'
@@ -68,31 +75,51 @@ export default function Register() {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             id="name"
             label="Name"
             name="name"
-            {...register('name')}
+            {...register('name', {
+              required: 'Field is required'
+            })}
           />
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
-            {...register('password')}
+            {...register('password', {
+              required: 'Field is required'
+            })}
           />
 
           <Box>{message}&nbsp;</Box>
-          <Box sx={{ display: 'flex', marginTop: '1.5rem' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'column',
+              gap: '0.5rem',
+              marginTop: '1.5rem'
+            }}
+          >
             <Button type="submit" fullWidth variant="contained" color="primary">
               Register
             </Button>
+
+            <Typography variant="body1">
+              Already have an account? Click{' '}
+              <Link
+                href="/login
+              "
+              >
+                here
+              </Link>{' '}
+              to login
+            </Typography>
           </Box>
         </form>
       </Box>
